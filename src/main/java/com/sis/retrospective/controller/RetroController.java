@@ -1,6 +1,6 @@
 package com.sis.retrospective.controller;
 
-import com.sis.retrospective.model.Retro;
+import com.sis.retrospective.model.RetroRecord;
 import com.sis.retrospective.service.RetroService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class RetroController {
     }
 
     @GetMapping("/retrospectives")
-    public List<Retro> getRetrospectives() {
+    public List<RetroRecord> getRetrospectives() {
         return retroService.getAllRetrospectives();
     }
 }
