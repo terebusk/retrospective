@@ -8,8 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -19,10 +18,12 @@ class RetroControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void givenAValidGetRequest_whenRequestingHelloEndpoint_thenExpectHelloStringResponse() throws Exception {
-        mockMvc.perform(get("/api/hello"))
+    void givenAValidGetRequest_whenRequestingListOfFeedback_thenExpectStatusOk_andExpectArray() throws Exception {
+        mockMvc.perform(get("/api/retrospectives"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Hello"));
+                .andExpect(jsonPath("$").isArray());
     }
+
+
 }
