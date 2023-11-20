@@ -9,3 +9,8 @@ spring:
       enabled: true
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    mvc:
+      format:
+        date: yyyy/MM/dd
+        date-time: yyyy/MM/dd HH:mm:ss
+        time: HH:mm:ss
