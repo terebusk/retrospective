@@ -15,6 +15,14 @@ public class FeedbackEntity {
     private String body;
     private String feedbackType;
 
+    public FeedbackEntity() {};
+
+    public FeedbackEntity(String name, String body, String feedbackType) {
+        this.name = name;
+        this.body = body;
+        this.feedbackType = feedbackType;
+    }
+
     public Long getId() {
         return id;
     }

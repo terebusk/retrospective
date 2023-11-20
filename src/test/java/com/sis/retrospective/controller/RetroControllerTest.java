@@ -67,7 +67,7 @@ class RetroControllerTest {
         mapper.registerModule(new JavaTimeModule());
         String jsonBody = mapper.writeValueAsString(retro);
 
-        mockMvc.perform(post("/api/retrospective")
+        mockMvc.perform(post("/api/retrospectives")
                         .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -80,7 +80,7 @@ class RetroControllerTest {
         mapper.registerModule(new JavaTimeModule());
         String jsonBody = mapper.writeValueAsString(retro);
 
-        mockMvc.perform(post("/api/retrospective")
+        mockMvc.perform(post("/api/retrospectives")
                         .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());

@@ -4,11 +4,11 @@ import com.sis.retrospective.entity.FeedbackEntity;
 import com.sis.retrospective.entity.RetroEntity;
 import com.sis.retrospective.model.FeedbackRecord;
 import com.sis.retrospective.model.RetroRecord;
+import com.sis.retrospective.model.exception.ResourceNotFoundException;
 import com.sis.retrospective.repository.RetroRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +35,7 @@ public class RetroService {
                                 .collect(Collectors.toList())));
     }
 
-    public void storeRetrospective(RetroRecord retroRecord) {
+    public void createRetrospective(RetroRecord retroRecord) {
         if (retroRecord.feedback() != null && !retroRecord.feedback().isEmpty()) {
             throw new IllegalArgumentException("Feedback should be empty when creating new Retrospective");
         }
@@ -48,4 +48,14 @@ public class RetroService {
 
         retroRepository.save(retroEntity);
     }
+
+    public Long createFeedback(String retrospectiveName, FeedbackRecord feedbackRecord) {
+        return retroRepository.findById(retrospectiveName).map(r -> {
+            r.getFeedback().addLast(new FeedbackEntity(feedbackRecord.name(), feedbackRecord.body(), feedbackRecord.feedbackType()));
+            RetroEntity retroEntity = retroRepository.save(r);
+            return retroEntity.getFeedback().getLast().getId();
+        }).orElseThrow(() -> new ResourceNotFoundException("Retrospective with unique name: " + retrospectiveName + " doesn't exist."));
+    }
+
+
 }

@@ -6,28 +6,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "Retro")
+@Table(name = "retro")
 public class RetroEntity {
-
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
-
     private String name;
     private String summary;
     private LocalDate date;
     private List<String> participants;
 
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     private List<FeedbackEntity> feedback;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
