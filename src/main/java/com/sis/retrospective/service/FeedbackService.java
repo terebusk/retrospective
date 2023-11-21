@@ -1,6 +1,5 @@
 package com.sis.retrospective.service;
 
-import com.sis.retrospective.controller.FeedbackController;
 import com.sis.retrospective.model.FeedbackRecord;
 import com.sis.retrospective.model.exception.ResourceNotFoundException;
 import com.sis.retrospective.repository.FeedbackRepository;

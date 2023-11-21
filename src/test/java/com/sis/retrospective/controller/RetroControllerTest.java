@@ -18,8 +18,7 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,16 +40,7 @@ class RetroControllerTest {
 
     @Test
     void givenRepositoryOfRetros_whenRequestingAPageOfResults_thenReturnRecordsOrderedByDate() throws Exception {
-        RetroEntity retroEntity = new RetroEntity();
-        retroEntity.setDate(LocalDate.of(2002, 1, 1));
-        RetroEntity retroEntity1 = new RetroEntity();
-        retroEntity1.setDate(LocalDate.of(2001, 1, 1));
-        RetroEntity retroEntity2 = new RetroEntity();
-        retroEntity2.setDate(LocalDate.of(2003, 1, 1));
-
-        retroRepository.save(retroEntity);
-        retroRepository.save(retroEntity1);
-        retroRepository.save(retroEntity2);
+        givenRepositoryOfRetrospectives();
 
         mockMvc.perform(get("/api/retrospectives"))
                 .andDo(print())
@@ -84,5 +74,44 @@ class RetroControllerTest {
                         .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void givenPrePopulatedRetrospectivesRepository_whenGetRetrospectivesByDate_thenReturnRetrospectivesMatchingDate() throws Exception {
+        givenRepositoryOfRetrospectives();
+
+        mockMvc.perform(get("/api/retrospectives/search?byDate=2002/01/01"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].date", org.hamcrest.Matchers.is("2002/01/01")));
+    }
+
+    @Test
+    void givenPrePopulatedRetrospectivesRepository_whenContentTypeXml_thenReturnXmlFormattedResponse() throws Exception {
+        givenRepositoryOfRetrospectives();
+
+        mockMvc.perform(get("/api/retrospectives/search?byDate=2002/01/01")
+                        .accept(MediaType.APPLICATION_XML))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(xpath("PageImpl/content/content/name").string("Retrospective 2"));
+    }
+
+    private void givenRepositoryOfRetrospectives() {
+        RetroEntity retroEntity = new RetroEntity();
+        retroEntity.setName("Retrospective 2");
+        retroEntity.setDate(LocalDate.of(2002, 1, 1));
+
+        RetroEntity retroEntity1 = new RetroEntity();
+        retroEntity1.setName("Retrospective 1");
+        retroEntity1.setDate(LocalDate.of(2001, 1, 1));
+
+        RetroEntity retroEntity2 = new RetroEntity();
+        retroEntity2.setName("Retrospective 3");
+        retroEntity2.setDate(LocalDate.of(2003, 1, 1));
+
+        retroRepository.save(retroEntity);
+        retroRepository.save(retroEntity1);
+        retroRepository.save(retroEntity2);
     }
 }

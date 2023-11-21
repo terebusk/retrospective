@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
@@ -33,6 +34,16 @@ public class RetroService {
                         Optional.ofNullable(r.getFeedback()).orElse(Collections.emptyList()).stream()
                                 .map(f -> new FeedbackRecord(f.getName(), f.getBody(), f.getFeedbackType()))
                                 .collect(Collectors.toList())));
+    }
+
+    public Page<RetroRecord> getRetrospectivesByDate(LocalDate date, Pageable pageable) {
+        return retroRepository.findByDate(date, pageable).map(r -> new RetroRecord(r.getName(),
+                r.getSummary(),
+                r.getDate(),
+                r.getParticipants(),
+                Optional.ofNullable(r.getFeedback()).orElse(Collections.emptyList()).stream()
+                        .map(f -> new FeedbackRecord(f.getName(), f.getBody(), f.getFeedbackType()))
+                        .collect(Collectors.toList())));
     }
 
     public void createRetrospective(RetroRecord retroRecord) {
