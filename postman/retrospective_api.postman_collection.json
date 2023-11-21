@@ -1,25 +1,195 @@
 {
 	"info": {
-		"_postman_id": "d9215725-3b69-49e6-9bfa-82fdef02b4bf",
+		"_postman_id": "598e6aeb-d08d-4903-9577-f34b6a2604a3",
 		"name": "Retrospective API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "31257782"
 	},
 	"item": [
 		{
-			"name": "Hello",
+			"name": "Get Retrospectives",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{host}}/api/hello",
+					"raw": "http://{{host}}/api/retrospectives",
 					"protocol": "http",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
-						"hello"
+						"retrospectives"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Retrospectives (application/xml)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/api/retrospectives",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"retrospectives"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Retrospectives by Date",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/api/retrospectives/search?byDate={{date}}",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"retrospectives",
+						"search"
+					],
+					"query": [
+						{
+							"key": "byDate",
+							"value": "{{date}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Retrospectives by Date (application/xml)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/api/retrospectives/search?byDate={{date}}",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"retrospectives",
+						"search"
+					],
+					"query": [
+						{
+							"key": "byDate",
+							"value": "{{date}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Retrospective",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Retrospective 1\",\r\n  \"summary\": \"Post release retrospective\",\r\n  \"date\": \"2022/07/27\",\r\n  \"participants\": [\r\n    \"Viktor\",\r\n    \"Gareth\",\r\n    \"Mike\"\r\n  ],\r\n  \"feedback\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/retrospectives",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"retrospectives"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Feedback",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Gareth\",\r\n    \"body\": \"Sprint objective met\",\r\n    \"feedbackType\": \"positive\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/retrospectives/{{name}}/feedbacks",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"retrospectives",
+						"{{name}}",
+						"feedbacks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Feedback",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"body\": \"Sprint objective not met\",\r\n    \"feedbackType\": \"negative\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/feedbacks/{{id}}",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"feedbacks",
+						"{{id}}"
 					]
 				}
 			},
